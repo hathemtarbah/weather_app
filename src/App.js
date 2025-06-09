@@ -1,23 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, {useState} from "react";
 
-function App() {
-  return (
+function App(){
+  const apiKey = "850897d6a39562f9f450a85e4656ee71";
+
+  const [query, setQuery] = useState("");
+  const [weather, setWeather] = useState(null);
+  
+  const getWeather = async() => {
+    if(!query) return;
+
+    try{
+      const res = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}&units=metric`
+      );
+      const data = await res.json();
+      setWeather(data);
+    } catch(err){
+      console.error("failed to fetch weather", err);
+    }
+  }
+  
+  
+
+  console.log(query)
+  
+  return(
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      
+      <h1>Weather App</h1>
+
+      <input
+        type="text"
+        placeholder="Enter city:"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+
+      <button onClick={getWeather}>Get weather</button>
+      {weather && weather.main && (
+        <div>
+          <h2>{weather.name}</h2>
+          <p>{weather.main.temp}°C</p>
+          <p>{weather.weather[0].description}</p>
+        </div>
+      )}
     </div>
   );
 }
