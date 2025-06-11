@@ -2,7 +2,7 @@ import "./App.css";
 import React, {useState} from "react";
 
 function App(){
-  const apiKey = "850897d6a39562f9f450a85e4656ee71";
+  const apiKey = process.env.REACT_APP_API_KEY;
 
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState(null);
